@@ -1,0 +1,46 @@
+turno,evento,detalle
+0,RECLUTA,imp0 +537 en prov2 (acumulacion ofensiva)
+1,ORDEN,imp0 prov2->prov3 A=240 tau=4
+1,FORTIFICA,imp1 prov3 -> F=1
+4,ORDEN,imp0 prov2->prov3 A=300 tau=3
+5,COMBATE,prov3 (imp1) A=240 vs S=160 | 20 rondas | superv atk=14 def=6 | RETIRADA de 14 a prov2
+5,ORDEN,imp0 prov2->prov3 A=12 tau=2
+6,ORDEN,imp0 prov2->prov3 A=12 tau=1
+7,COMBATE,prov3 (imp1) A=300 vs S=6 | 10 rondas | superv atk=293 def=0 | CONQUISTA por imp0
+7,REFUERZO,prov3 +12
+7,REFUERZO,prov3 +12
+7,ORDEN,imp0 prov3->prov4 A=188 tau=3
+7,FORTIFICA,imp1 prov4 -> F=2
+8,RECLUTA,imp0 +637 en prov3 (acumulacion ofensiva)
+8,FORTIFICA,imp1 prov4 -> F=3
+9,ORDEN,imp0 prov3->prov4 A=263 tau=2
+10,COMBATE,prov4 (imp1) A=188 vs S=100 | 20 rondas | superv atk=1 def=16 | RETIRADA de 1 a prov3
+10,ORDEN,imp0 prov3->prov4 A=42 tau=2
+11,COMBATE,prov4 (imp1) A=263 vs S=16 | 14 rondas | superv atk=226 def=0 | CONQUISTA por imp0
+11,RECLUTA,imp0 +570 en prov4 (acumulacion ofensiva)
+12,REFUERZO,prov4 +42
+12,ORDEN,imp0 prov4->prov5 A=270 tau=4
+14,ORDEN,imp0 prov4->prov5 A=270 tau=4
+15,RECLUTA,imp0 +813 en prov4 (acumulacion ofensiva)
+16,COMBATE,prov5 (imp1) A=270 vs S=120 | 15 rondas | superv atk=94 def=0 | CONQUISTA por imp0
+16,RECLUTA,imp0 +522 en prov0 (acumulacion ofensiva)
+17,ORDEN,imp0 prov0->prov8 A=225 tau=2
+18,REFUERZO,prov5 +270
+18,ORDEN,imp0 prov5->prov6 A=210 tau=3
+19,COMBATE,prov8 (imp2) A=225 vs S=100 | 20 rondas | superv atk=66 def=1 | RETIRADA de 66 a prov0
+20,ORDEN,imp0 prov0->prov8 A=3 tau=2
+21,COMBATE,prov6 (imp2) A=210 vs S=140 | 20 rondas | superv atk=53 def=1 | RETIRADA de 53 a prov5
+21,ORDEN,imp0 prov5->prov6 A=2 tau=3
+22,COMBATE,prov8 (imp2) A=3 vs S=1 | 4 rondas | superv atk=3 def=0 | CONQUISTA por imp0
+22,ORDEN,imp0 prov5->prov6 A=2 tau=2
+23,ORDEN,imp0 prov5->prov6 A=2 tau=2
+24,COMBATE,prov6 (imp2) A=2 vs S=1 | 11 rondas | superv atk=1 def=0 | CONQUISTA por imp0
+24,REFUERZO,prov6 +2
+24,RECLUTA,imp0 +2359 en prov6 (acumulacion ofensiva)
+25,REFUERZO,prov6 +2
+25,ORDEN,imp0 prov6->prov7 A=300 tau=4
+27,ORDEN,imp0 prov6->prov7 A=300 tau=2
+28,ORDEN,imp0 prov6->prov7 A=300 tau=2
+29,COMBATE,prov7 (imp2) A=300 vs S=160 | 20 rondas | superv atk=86 def=2 | RETIRADA de 86 a prov6
+29,COMBATE,prov7 (imp2) A=300 vs S=2 | 1 rondas | superv atk=300 def=0 | CONQUISTA por imp0
+29,FIN,dominacion territorial | 1 ordenes en vuelo canceladas
