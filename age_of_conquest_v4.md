@@ -134,6 +134,8 @@ Los valores de §1.4 son valores de referencia razonados a partir del diseño (v
 
 Con N=40 el efecto es distinguible en la métrica de combates entre casi todos los pares de valores (IC95% disjuntos), y en turno de victoria entre 0.2 y el resto. A $k_c=0.1$ el 98% de las corridas no produce ganador en $T_{max}=200$ — la letalidad es tan baja que casi ninguna conquista se completa a tiempo, coherente con la Corrección 14 (conquista por rondas: menos letalidad por ronda, más rondas necesarias). Es coherente con la ec. 7 — $k_c$ escala directamente $p_A + p_D$ — y confirma que el sistema es sensible a este parámetro en todo el rango probado, no sólo cerca de 0.3.
 
+El % sin ganador tampoco es monótono en el resto del rango (50% en 0.2, sube a 62% en 0.4 y 0.5): más letalidad no significa menos empates. Instrumentando los ataques `EXPANSIVO` (mismas 10 semillas, $T_{max}=200$) se confirma el mecanismo — a $k_c=0.4$ cada asalto es más decisivo (93% termina en conquista, contra 40% a $k_c=0.2$) pero también más costoso para el atacante (bajas propias ≈66% de la fuerza enviada, contra ≈51%), lo que alarga el intervalo hasta el siguiente ataque del mismo imperio (2.3 turnos vs 1.9) y reduce el ritmo total de la campaña (96 órdenes de ataque emitidas en la misma ventana, contra 156 a $k_c=0.2$): suficiente para que más partidas no completen la dominación territorial antes de $T_{max}$.
+
 **Hallazgo revisado — $\rho_{atk}$ sí tiene efecto distinguible; $\beta$ y $S_{min}$ no, incluso con N=40.**
 
 | $\rho_{atk}$ | turno victoria (media, IC95%) | % sin ganador | combates (media, IC95%) |
@@ -904,8 +906,12 @@ Los cinco streams superan la batería completa de forma individual. Independenci
 | `simulacion.py` | Bucle principal, verificador de invariantes, escenario | §3.3, §4 | Validado |
 | `validar.py` | Batería del generador; reproduce las tablas de §6.5 | §6 | Ejecutable |
 | `test_modelo.py` | Verifica las fronteras F1–F10 sobre corridas reales | §4 | Ejecutable |
+| `sensibilidad.py` | Barrido de $k_c$, $\rho_{atk}$, $\beta$, $S_{min}$ con IC 95% y confirmación por t de Welch + Bonferroni | §1.5 | Ejecutable |
+| `replicas.py` | Análisis de salida por réplicas (N=40): IC 95% de turno final y conquistas | §1.5 | Ejecutable |
+| `visualizar.py` | Exporta bitácora/historial a CSV y grafica oro, provincias y población por imperio | material de apoyo para la sustentación | Ejecutable |
+| `diagramas/` (3 `.mermaid`) | Diagramas de flujo de `Ev_InicioTurno`, `evaluarOpcionesEstocasticas` y `bucleDeSimulacion`, embebidos en §3.1–§3.3 de este documento | material de apoyo para la sustentación | Validado |
 
-Sin dependencias externas: sólo biblioteca estándar de Python.
+El motor (`rng.py` a `test_modelo.py` en la tabla anterior) no tiene dependencias externas: sólo biblioteca estándar de Python. `sensibilidad.py` y `replicas.py` tampoco las necesitan; `visualizar.py` sí requiere matplotlib instalado (ver README).
 
 ## 7.1 Resultados de verificación
 
