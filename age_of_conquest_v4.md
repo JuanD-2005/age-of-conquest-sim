@@ -30,7 +30,7 @@ Este documento formaliza matemáticamente las entidades, atributos y eventos def
 | 13 | 3.2 | La política `EXPANSIVO` no tenía mecanismo de reclutamiento: sólo podía atacar con la guarnición inicial, que nunca crece. **Deadlock estructural** detectado en implementación. Añadida fase de acumulación. |
 | 14 | 2.5 | La conquista exigía $S_{j,t+1}=0$ en un único intercambio, inalcanzable con $k_c=0.3$ (16 combates → 0 conquistas). El asalto ahora se resuelve por rondas. |
 | 15 | 2.5 | La ec. 10 dejaba $A'_k$ **indefinido** cuando no hay conquista: los supervivientes desaparecían del sistema. Añadida regla de retirada. |
-| 16 | 3.5 | `Ev_FinSimulacion` dejaba órdenes en vuelo con $\sigma_k = $ `EN_TRANSITO`, un estado no terminal. Ahora se cancelan al cierre. |
+| 16 | 3.5 | `Ev_FinSimulacion` dejaba órdenes en vuelo con $\sigma_k$ = `EN_TRANSITO`, un estado no terminal. Ahora se cancelan al cierre. |
 
 ---
 
@@ -74,7 +74,7 @@ Persisten entre turnos y sólo son modificadas por los eventos de la LEF.
 |---------|--------------------|--------|-------------|
 | $\pi_i$ | `politicaEstrategica` | enum | `EXPANSIVO` \| `DEFENSIVO` \| `ECONOMICO` |
 | $\tau_k$ | `tiempoViaje` | turnos | Retardo entre emisión y llegada de la orden $k$ |
-| $L_k$ | `turnoLlegada` | turno | $L_k = t_{emisión} + \tau_k$. Marca temporal de encolado en la LEF |
+| $L_k$ | `turnoLlegada` | turno | $L_k = t_{\text{emisión}} + \tau_k$. Marca temporal de encolado en la LEF |
 | $A_k$ | `fuerzaMilitar` | soldados | Tropas en tránsito asociadas a la orden $k$ |
 | $D^{eff}_{j,t}$ | (en `resolverCombate`) | soldados | Fuerza defensiva efectiva de la provincia $j$ |
 
@@ -682,7 +682,7 @@ PROCEDIMIENTO Ev_FinSimulacion(t, causa):
 FIN PROCEDIMIENTO
 ```
 
-> **Corrección 16 (detectada en implementación).** Purgar la LEF descarta los `Ev_LlegadaOrden` pendientes, dejando sus órdenes con $\sigma_k = $ `EN_TRANSITO` **al cierre de la partida**. El ciclo de vida declarado en §1.1 exige que toda orden termine en `RESUELTA` o `CANCELADA`; un estado no terminal al final es una inconsistencia de la máquina de estados. El bucle de cancelación la cierra.
+> **Corrección 16 (detectada en implementación).** Purgar la LEF descarta los `Ev_LlegadaOrden` pendientes, dejando sus órdenes con $\sigma_k$ = `EN_TRANSITO` **al cierre de la partida**. El ciclo de vida declarado en §1.1 exige que toda orden termine en `RESUELTA` o `CANCELADA`; un estado no terminal al final es una inconsistencia de la máquina de estados. El bucle de cancelación la cierra.
 
 ---
 
