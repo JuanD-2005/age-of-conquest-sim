@@ -1,0 +1,20 @@
+flowchart TD
+    A["evaluarOpcionesEstocasticas(imperio, t)"] --> B{"estadoFinanciero = BANCARROTA?"}
+    B -->|Si| C["politica = ECONOMICO<br/>retornar (override)"]
+    B -->|No| D["tirada u ~ U(0,1)<br/>stream: decision_ia"]
+    D --> E{"u mayor o igual p_agresion(politica)?"}
+    E -->|Si| F["no actua este turno"]
+    E -->|No| G["presupuesto = oro - reserva mantenimiento"]
+    G --> H{"presupuesto menor o igual 0?"}
+    H -->|Si| F
+    H -->|No| I{"politica?"}
+    I -->|EXPANSIVO| J["buscar objetivo con menor D_eff<br/>requerido = techo(rho_atk * D_eff)"]
+    J --> K{"tropas y oro disponibles?"}
+    K -->|Si| L["emitir orden de ataque"]
+    K -->|No| M["Fase 2: reclutar en frontera<br/>(Correccion 13 -- evita deadlock)"]
+    I -->|DEFENSIVO| N{"provincia bajo S_min?"}
+    N -->|Si| O["reclutar hasta S_min"]
+    N -->|No| P{"F menor a F_max en alguna frontera?"}
+    P -->|Si| Q["fortificar"]
+    P -->|No| R["reclutar excedente en frontera"]
+    I -->|ECONOMICO| S["no emite ordenes militares<br/>acumula reservas"]

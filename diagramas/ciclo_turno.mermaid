@@ -1,0 +1,18 @@
+flowchart TD
+    A["Ev_InicioTurno(t)"] --> B["Paso 1 — Snapshot fiscal<br/>pob_fiscal[j] = j.poblacion"]
+    B --> C["Paso 2 — Fase demografica<br/>ecuacion 1: crecimiento logistico"]
+    C --> D{"poblacion = 0?"}
+    D -->|Si| E["estadoProvincia = ABANDONADA"]
+    D -->|No| F
+    E --> F["Paso 3 — Recaudacion<br/>sobre pob_fiscal (ec. 2), NO sobre poblacion nueva"]
+    F --> G["Paso 4 — Mantenimiento militar<br/>ecuacion 3"]
+    G --> H["Paso 5 — Actualizar tesoro<br/>ecuacion 4"]
+    H --> I{"oroDisponible menor a 0?"}
+    I -->|Si| J["BANCARROTA<br/>encolar Ev_CrisisFinanciera"]
+    I -->|No| K["SOLVENTE"]
+    J --> L["Paso 7 — IA por imperio<br/>evaluarOpcionesEstocasticas"]
+    K --> L
+    L --> M["Paso 8 — actualizar estadoActivo<br/>(true si tiene al menos 1 provincia)"]
+    M --> N{"t+1 menor o igual T_max?"}
+    N -->|Si| O["encolar Ev_InicioTurno(t+1)"]
+    N -->|No| P["encolar Ev_FinSimulacion"]

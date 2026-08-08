@@ -442,6 +442,29 @@ PROCEDIMIENTO Ev_InicioTurno(t):
 FIN PROCEDIMIENTO
 ```
 
+**Diagrama de flujo equivalente:**
+
+```mermaid
+flowchart TD
+    A["Ev_InicioTurno(t)"] --> B["Paso 1 — Snapshot fiscal<br/>pob_fiscal[j] = j.poblacion"]
+    B --> C["Paso 2 — Fase demografica<br/>ecuacion 1: crecimiento logistico"]
+    C --> D{"poblacion = 0?"}
+    D -->|Si| E["estadoProvincia = ABANDONADA"]
+    D -->|No| F
+    E --> F["Paso 3 — Recaudacion<br/>sobre pob_fiscal (ec. 2), NO sobre poblacion nueva"]
+    F --> G["Paso 4 — Mantenimiento militar<br/>ecuacion 3"]
+    G --> H["Paso 5 — Actualizar tesoro<br/>ecuacion 4"]
+    H --> I{"oroDisponible menor a 0?"}
+    I -->|Si| J["BANCARROTA<br/>encolar Ev_CrisisFinanciera"]
+    I -->|No| K["SOLVENTE"]
+    J --> L["Paso 7 — IA por imperio<br/>evaluarOpcionesEstocasticas"]
+    K --> L
+    L --> M["Paso 8 — actualizar estadoActivo<br/>(true si tiene al menos 1 provincia)"]
+    M --> N{"t+1 menor o igual T_max?"}
+    N -->|Si| O["encolar Ev_InicioTurno(t+1)"]
+    N -->|No| P["encolar Ev_FinSimulacion"]
+```
+
 > **Corrección 7 (bug funcional).** En la v3, el paso demográfico mutaba `j.poblacion` y el paso de recaudación leía esa misma variable ya actualizada, cobrando impuestos sobre $P_{j,t+1}$ mientras las ecs. 2 y 4 especifican $P_{j,t}$. Con $r = 0.05$ eso sobrestimaba la recaudación hasta un 5% por turno de forma acumulativa. El `PASO 1` congela el valor fiscal antes de cualquier mutación.
 >
 > **Corrección 8.** La v3 tenía dos pasos numerados "3". La secuencia ahora es 1–9 sin colisiones.
@@ -512,6 +535,31 @@ PROCEDIMIENTO evaluarOpcionesEstocasticas(imperio i, turno t):
 FIN PROCEDIMIENTO
 ```
 
+**Diagrama de flujo equivalente:**
+
+```mermaid
+flowchart TD
+    A["evaluarOpcionesEstocasticas(imperio, t)"] --> B{"estadoFinanciero = BANCARROTA?"}
+    B -->|Si| C["politica = ECONOMICO<br/>retornar (override)"]
+    B -->|No| D["tirada u ~ U(0,1)<br/>stream: decision_ia"]
+    D --> E{"u mayor o igual p_agresion(politica)?"}
+    E -->|Si| F["no actua este turno"]
+    E -->|No| G["presupuesto = oro - reserva mantenimiento"]
+    G --> H{"presupuesto menor o igual 0?"}
+    H -->|Si| F
+    H -->|No| I{"politica?"}
+    I -->|EXPANSIVO| J["buscar objetivo con menor D_eff<br/>requerido = techo(rho_atk * D_eff)"]
+    J --> K{"tropas y oro disponibles?"}
+    K -->|Si| L["emitir orden de ataque"]
+    K -->|No| M["Fase 2: reclutar en frontera<br/>(Correccion 13 -- evita deadlock)"]
+    I -->|DEFENSIVO| N{"provincia bajo S_min?"}
+    N -->|Si| O["reclutar hasta S_min"]
+    N -->|No| P{"F menor a F_max en alguna frontera?"}
+    P -->|Si| Q["fortificar"]
+    P -->|No| R["reclutar excedente en frontera"]
+    I -->|ECONOMICO| S["no emite ordenes militares<br/>acumula reservas"]
+```
+
 > **Corrección 13 (detectada en implementación).** La v3 daba capacidad de reclutamiento **únicamente** a la política `DEFENSIVO`. Un imperio `EXPANSIVO` sólo podía atacar con su guarnición inicial, que nunca crece, mientras el umbral $\rho_{atk} \cdot D^{eff}$ del objetivo sí crece con las fortificaciones enemigas. Resultado medido en la primera corrida: **0 ataques en 100 turnos** y 180.000 de oro acumulado sin uso. Es un deadlock estructural, no un problema de parámetros. Se añade la **fase 2 de acumulación**: si ningún objetivo es atacable, el imperio invierte en reclutar hasta alcanzar el umbral. Análogamente, `DEFENSIVO` engrosa guarniciones cuando ya alcanzó $F_{max}$ en toda su frontera.
 >
 > **Corrección 9.** La v3 decía "ataca si su fuerza supera a $D^{eff}$ y hay oro suficiente" y "refuerza provincias bajo umbral mínimo", sin definir ni la superioridad ni el umbral ni "suficiente". Ahora son $\rho_{atk} = 1.5$, $S_{min} = 50$ y la regla de reserva $\ge c_m \sum S$. Un programador externo puede codificar esto sin consultar al equipo, que es el criterio explícito del enunciado.
@@ -532,6 +580,28 @@ PROCEDIMIENTO bucleDeSimulacion():
         evaluarCondicionVictoria()
     FIN MIENTRAS
 FIN PROCEDIMIENTO
+```
+
+**Diagrama de flujo equivalente:**
+
+```mermaid
+flowchart TD
+    A["inicializarEstado()"] --> B["encolar Ev_InicioTurno, turno=0"]
+    B --> C{"estadoPartida = EN_CURSO<br/>y LEF no vacia?"}
+    C -->|No| Z["Fin de la simulacion"]
+    C -->|Si| D["LEF.extraerMinimo()<br/>clave: (turno, prioridad, secuencia)"]
+    D --> E["relojSimulacion = evento.turno"]
+    E --> F["procesarEvento(evento)"]
+    F --> G["evaluarCondicionVictoria()"]
+    G --> C
+
+    subgraph "Regla de desempate (prioridad ascendente)"
+    direction LR
+    P1["1. CrisisFinanciera"] --> P2["2. ResolucionCombate"]
+    P2 --> P3["3. LlegadaOrden"]
+    P3 --> P4["4. InicioTurno"]
+    P4 --> P5["5. FinSimulacion"]
+    end
 ```
 
 **Regla de desempate** (cuando dos eventos comparten turno), en orden de prioridad descendente:

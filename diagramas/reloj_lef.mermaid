@@ -1,0 +1,17 @@
+flowchart TD
+    A["inicializarEstado()"] --> B["encolar Ev_InicioTurno, turno=0"]
+    B --> C{"estadoPartida = EN_CURSO<br/>y LEF no vacia?"}
+    C -->|No| Z["Fin de la simulacion"]
+    C -->|Si| D["LEF.extraerMinimo()<br/>clave: (turno, prioridad, secuencia)"]
+    D --> E["relojSimulacion = evento.turno"]
+    E --> F["procesarEvento(evento)"]
+    F --> G["evaluarCondicionVictoria()"]
+    G --> C
+
+    subgraph "Regla de desempate (prioridad ascendente)"
+    direction LR
+    P1["1. CrisisFinanciera"] --> P2["2. ResolucionCombate"]
+    P2 --> P3["3. LlegadaOrden"]
+    P3 --> P4["4. InicioTurno"]
+    P4 --> P5["5. FinSimulacion"]
+    end
