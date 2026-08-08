@@ -8,6 +8,14 @@ from variables import binomial, triangular_entero
 SEP = "=" * 74
 def sec(t): print(f"\n{SEP}\n{t}\n{SEP}")
 
+def pearson(a, b):
+    """Correlacion de Pearson entre dos muestras alineadas, sin numpy."""
+    n = len(a)
+    ma, mb = sum(a) / n, sum(b) / n
+    cov = sum((a[i] - ma) * (b[i] - mb) for i in range(n))
+    den = (sum((v - ma) ** 2 for v in a) * sum((v - mb) ** 2 for v in b)) ** 0.5
+    return cov / den
+
 # --- 1 ---------------------------------------------------------------------
 sec("1. GCL: VERIFICACION DE PERIODO COMPLETO (Hull-Dobell)")
 print(f"x_n = ({A} * x_(n-1) + {B}) mod 2^{K_BITS}\n")
@@ -31,11 +39,13 @@ ok = sum(1 for _ in range(500)
          if (Ak * g1.siguiente_entero() + Bk) % M == g2.siguiente_entero())
 print(f"   Relacion afin x2_i = A_k*x1_i + B_k (mod m): {ok}/500 pares la cumplen")
 g1.reiniciar(); g2.reiniciar()
-inter = [v for p in zip([g1.u() for _ in range(3000)],
-                        [g2.u() for _ in range(3000)]) for v in p]
+s1 = [g1.u() for _ in range(5000)]
+s2 = [g2.u() for _ in range(5000)]
+inter = [v for p in zip(s1, s2) for v in p]
 r = prueba_corridas(inter)
 print(f"   Prueba de corridas sobre streams intercalados: Z = {r['Z']}"
       f" -> rechaza H0 = {r['rechaza_H0']}")
+print(f"   Correlacion de Pearson entre pares alineados: {pearson(s1, s2):.5f}")
 print("   CONCLUSION: streams de GCL por salto NO son independientes en lockstep.")
 
 # --- 3 ---------------------------------------------------------------------
