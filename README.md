@@ -16,12 +16,15 @@ python3 -c "from simulacion import correr; p,s,st = correr(semilla=7, turnos_max
 
 Estos scripts NO forman parte del motor validado — no tocan `eventos.py` /
 `simulacion.py` / `rng.py` — son análisis externos sobre corridas del modelo.
-Pueden usar numpy/matplotlib si hace falta (el motor sigue siendo stdlib-only).
+El motor (`entidades.py`, `lef.py`, `eventos.py`, `simulacion.py`, `rng.py`,
+`pruebas.py`, `variables.py`) no necesita nada fuera de la librería estándar
+de Python, y eso no cambia: los scripts de análisis pueden depender de
+paquetes externos si hace falta, pero cada uno declara lo que realmente usa.
 
 ```bash
-python3 sensibilidad.py  # barrido de k_c, rho_atk, beta, S_min (§1.5 del documento)
-python3 replicas.py      # 40 réplicas, IC 95% de turno_final y conquistas -> resultados/replicas.csv
-python3 visualizar.py    # bitácora de la semilla 7 -> resultados/figuras/*.png
+python3 sensibilidad.py  # barrido de k_c, rho_atk, beta, S_min (§1.5) -- stdlib-only
+python3 replicas.py      # 40 réplicas, IC 95% de turno_final y conquistas -> resultados/replicas.csv -- stdlib-only
+python3 visualizar.py    # bitácora de la semilla 7 -> resultados/figuras/*.png -- REQUIERE matplotlib instalado
 ```
 
 ## Estructura
