@@ -42,12 +42,12 @@ SIMU/
 │       └── informe_p3.md              (pendiente) — María
 │
 └── entrega_p3/                        planificación de la entrega del Parcial III
-    ├── notas_defensa.md               notas de apoyo (cada quien llena su sección)
     ├── 01_simulador/README.md         → entregable: main.py
     ├── 02_informe/README.md           → entregable: docs/parcial3_informe/informe_p3.md
     └── 03_defensa/
         ├── README.md
         ├── DEFENSA.md
+        ├── notas_defensa.md           notas de apoyo (cada quien llena su sección)
         ├── estrategia_validacion.md   (pendiente) — Gustavo
         └── escenarios_demo.py         (pendiente) — Gustavo
 ```
