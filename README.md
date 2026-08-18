@@ -10,7 +10,7 @@ Los `.py` del motor viven en la raíz a propósito: los imports son planos
 ```
 SIMU/
 ├── README.md                          este archivo
-├── main.py                            (pendiente) interfaz de consola — Juan
+├── main.py                            interfaz de consola interactiva (demo en vivo)
 │
 ├── entidades.py                       Partida, Imperio, Provincia, OrdenMilitar, Parámetros
 ├── lef.py                             Lista de Eventos Futuros
@@ -57,10 +57,23 @@ SIMU/
 Requiere Python 3.8+. El motor no tiene **dependencias externas**.
 
 ```bash
+python3 main.py          # interfaz de consola interactiva (demo en vivo)
 python3 validar.py       # batería del generador (§6 del documento)
 python3 test_modelo.py   # condiciones de frontera F1-F10 (§4)
 python3 -c "from simulacion import correr; p,s,st = correr(semilla=7, turnos_max=200); print(st)"
 ```
+
+`main.py` es la interfaz pedida por el enunciado del Parcial III: permite
+configurar el escenario (número de imperios y provincias, tropas iniciales,
+oro inicial, **tasa impositiva** y semilla), avanzar turno a turno o de N en
+N, correr hasta el final e inspeccionar el estado (provincia, órdenes en
+tránsito, LEF). Dando Enter a todo se arranca el escenario por defecto, que
+es el mismo con el que `test_modelo.py` valida las fronteras F1–F10.
+
+No reimplementa el modelo: avanza la simulación con
+`simulacion.procesar_siguiente_evento()`, la misma función que usa el bucle
+automático, de modo que una demo interactiva y una corrida de
+`simulacion.correr()` con la misma semilla producen partidas idénticas.
 
 ### Análisis complementario (Parcial III)
 

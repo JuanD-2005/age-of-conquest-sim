@@ -66,6 +66,22 @@ class LEF:
     def vacia(self):
         return len(self._heap) == 0
 
+    def proximo_turno(self):
+        """Turno del proximo evento SIN extraerlo. None si la LEF esta vacia.
+
+        Lo consume la interfaz de consola para avanzar exactamente un turno:
+        procesar mientras el proximo evento siga perteneciendo al turno en
+        curso. Es de solo lectura, no altera el orden de la cola.
+        """
+        return self._heap[0][0] if self._heap else None
+
+    def conteo_por_tipo(self):
+        """{TipoEvento: cantidad} de lo que hay encolado, para inspeccion."""
+        conteo = {}
+        for _, _, _, evento in self._heap:
+            conteo[evento.tipo] = conteo.get(evento.tipo, 0) + 1
+        return conteo
+
     def purgar(self):
         """Vacia la LEF. Se usa al disparar Ev_FinSimulacion."""
         self._heap.clear()
