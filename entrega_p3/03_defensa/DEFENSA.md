@@ -4,7 +4,7 @@ Grupo 3 — Ballesteros María, Morillo Gustavo, Juan Paredes
 
 ## Qué se implementó
 
-El motor completo de `age_of_conquest_v4.md`, en cuatro módulos que se importan en cadena
+El motor completo de `docs/parcial2_anexo/age_of_conquest_v4.md`, en cuatro módulos que se importan en cadena
 (`entidades.py` → `lef.py` → `eventos.py` → `simulacion.py`), más `rng.py`, `variables.py` y
 `pruebas.py` como soporte de aleatoriedad. Los siete corren **sin dependencias externas** —
 solo biblioteca estándar de Python — porque el criterio de defensa exige poder mostrar que
@@ -94,7 +94,7 @@ documento.
 
 ## Figura
 
-![Provincias por imperio a lo largo del tiempo, semilla 7](resultados/figuras/provincias_por_imperio.png)
+![Provincias por imperio a lo largo del tiempo, semilla 7](../../resultados/figuras/provincias_por_imperio.png)
 
 Semilla 7: el imperio 0 (EXPANSIVO) pasa de 3 a 9 provincias y gana en el turno 29,
 absorbiendo primero al imperio 1 (DEFENSIVO) y luego al imperio 2 (ECONÓMICO). Más figuras
